@@ -31,6 +31,15 @@ func main() {
 	})
 	client := s3.New(session)
 
+	_, err := client.HeadObject(&s3.HeadObjectInput{
+		Bucket: &args.Bucket,
+		Key:    &args.Key,
+	})
+	if err != nil {
+		log.Println("Failed to fetch s3://" + args.Bucket + "/" + args.Key + ": signed URL will not work.")
+		log.Fatal(err)
+	}
+
 	req, _ := client.GetObjectRequest(&s3.GetObjectInput{
 		Bucket: &args.Bucket,
 		Key:    &args.Key,
